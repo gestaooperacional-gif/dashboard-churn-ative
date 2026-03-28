@@ -421,12 +421,22 @@ function normalizeRow(r) {
   const churnFlag = get('Churn (S/N)','Churn','churn');
 
   const mensalRaw = get('Churn Mensal (R$)','Mensal','mensal');
-  const ltvRaw = get('LTV Gerado','LTV','ltv');
-  const entradaRaw = get('Data de entrada','Entrada','entrada');
-  const churnDateRaw = get('Data do Churn','Data Churn','data_churn');
+const ltvRaw = get('LTV Gerado','LTV','ltv');
+const entradaRaw = get('Data de entrada','Entrada','entrada');
+const churnDateRaw = get('Data do Churn','Data Churn','data_churn');
 
-  const mensal = parseFloat(String(mensalRaw).replace(/[^\d.,-]/g,'').replace(',','.')) || 0;
-  const ltv = parseFloat(String(ltvRaw).replace(/[^\d.,-]/g,'').replace(',','.'));
+function parseBRL(value) {
+  if (value == null) return 0;
+  return parseFloat(
+    String(value)
+      .replace(/[^\d,.-]/g, '')
+      .replace(/\./g, '')
+      .replace(',', '.')
+  ) || 0;
+}
+
+const mensal = parseBRL(mensalRaw);
+const ltv = parseBRL(ltvRaw);
 
   // Normaliza datas (aceita DD/MM/YYYY e YYYY-MM-DD)
   const parseDate = s => {
